@@ -9,6 +9,9 @@ let playerWidth = 10;
 let playerHeight = 50;
 let playerVelocityY = 0;
 
+let player1Score = 0;
+let player2Score = 0;
+
 let player1 = { /* Player 1's position */
     x: 10,
     y: boardHeight / 2,
@@ -82,8 +85,32 @@ function update(){
 
     //bounce the ball back from paddle
     if(detectCollision(ball, player1)){
-        
+        if(ball.x <= (player1.x + player1.width)){
+            //left side of ball touches right side of player1
+            ball.velocityX *= -1;
+        }
     }
+    else if(detectCollision(ball, player2)){
+        if(ball.x + ballWidth >= player2.x ){
+            //right side of ball touches left side of player2
+            ball.velocityX *= -1;
+        }
+    }
+
+    //game over for each round
+    if(ball.x < 0 ){
+        player2Score++;
+        resetGame(1);
+    }
+    else if(ball.x + ballWidth > boardWidth){
+        player1Score++;
+        resetGame(-1);
+    }
+
+    //draw the score
+    context.font = "45px sans-serif";
+    context.fillText(player1Score, boardWidth/5, 45);
+    context.fillText(player2Score, boardWidth*4/5 -45, 45);
 }
 
 function outOfBounds(yPosition) {
@@ -111,4 +138,15 @@ function detectCollision(a, b) {
             a.x + a.width > b.x && //a's top right corner passes b's top left corner
             a.y < b.y + b.height && // a's top left corner doesn't reach b's bottom left corner 
             a.y + a.height > b.y); // a's bottom left corner doesn't reach b's top left corner 
+}
+
+function resetGame(direction){
+    let ball = {
+        x: boardWidth/2,
+        y: boardHeight/2,
+        width: ballWidth,
+        height: ballHeight,
+        velocityX: direction,
+        velocityY: 2
+    };
 }
