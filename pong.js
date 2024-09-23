@@ -111,6 +111,12 @@ function update(){
     context.font = "45px sans-serif";
     context.fillText(player1Score, boardWidth/5, 45);
     context.fillText(player2Score, boardWidth*4/5 -45, 45);
+
+    //draw dotted line in the middle of board
+    for(let indx = 10; indx < board.height; indx += 25){
+        //indx=starting y position, draw a square every 25 pixels down
+        context.fillRect(board.width/2 - 10, indx, 5, 5);
+    }
 }
 
 function outOfBounds(yPosition) {
@@ -141,7 +147,7 @@ function detectCollision(a, b) {
 }
 
 function resetGame(direction){
-    let ball = {
+    ball = {
         x: boardWidth/2,
         y: boardHeight/2,
         width: ballWidth,
